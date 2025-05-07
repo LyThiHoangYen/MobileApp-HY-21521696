@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ThongBaoActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:theme="@style/Theme.Assignment.AppBarOverlay"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/ttnv"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            android:background="@color/main_color"
+            app:popupTheme="@style/Theme.Assignment.PopupOverlay"/>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+
+
+        <Spinner
+            android:id="@+id/spinner_thongbao"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"/>
+
+
+        <EditText
+                android:id="@+id/chu_de_thong_bao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="60dp"
+                android:inputType="text"
+                android:hint="Nhập chủ đề thông báo"
+                android:paddingHorizontal="5dp"/>
+
+
+
+        <EditText
+                android:id="@+id/noi_dung_thong_bao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="120dp"
+                android:inputType="textMultiLine"
+                android:hint="Nhập nội dung thông báo"
+                android:maxLines="10"
+                android:paddingHorizontal="5dp"/>
+
+        <Button
+            android:id="@+id/button_taothongbao"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:text="Đăng tin"
+            android:layout_gravity="center|bottom"
+            android:layout_marginBottom="40dp"
+            />
+
+
+    </FrameLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

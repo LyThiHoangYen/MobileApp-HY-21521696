@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">Priya HRM</string>
+    <string name="themnhanvien">Thêm nhân viên</string>
+    <string name="s_a">Sửa</string>
+    <string name="open">OPEN</string>
+    <string name="other_options">Other Options</string>
+    <string name="login">LOGIN</string>
+
+    <string-array name="ten_bao_cao">
+        <item>Báo cáo 1</item>
+        <item>Báo cáo 2</item>
+        <item>Báo cáo 3</item>
+        <item>Báo cáo 4</item>
+        <item>Báo cáo 5</item>
+        <item>Báo cáo 6</item>
+        <item>Báo cáo 7</item>
+        <item>Báo cáo 8</item>
+        <item>Báo cáo 9</item>
+        <item>Báo cáo 10</item>
+        <item>Báo cáo 11</item>
+        <item>Báo cáo 12</item>
+    </string-array>
+    <string-array name="description">
+        <item>Điểm danh tháng 1</item>
+        <item>Điểm danh tháng 2</item>
+        <item>Điểm danh tháng 3</item>
+        <item>Điểm danh tháng 4</item>
+        <item>Điểm danh tháng 5</item>
+        <item>Điểm danh tháng 6</item>
+        <item>Điểm danh tháng 7</item>
+        <item>Điểm danh tháng 8</item>
+        <item>Điểm danh tháng 9</item>
+        <item>Điểm danh tháng 10</item>
+        <item>Điểm danh tháng 11</item>
+        <item>Điểm danh tháng 12</item>
+    </string-array>
+
+    <string name="title_navigation_home">Trang chủ</string>
+    <string name="title_navigation_newsfeed">Bảng tin</string>
+    <string name="title_navigation_profile">Hồ sơ</string>
+    <string name="title_activity_main2">MainActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+</resources>
