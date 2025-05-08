@@ -25,7 +25,7 @@ public class RecycleViewData extends RecyclerView.Adapter<RecycleViewData.DataVi
 
     public RecycleViewData.DataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView ;
-        itemView= LayoutInflater.from(parent.getContext()).inflate(R.layout.diemdanh,parent,false);
+        itemView= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_diem_danh, parent, false);
         return new DataViewHolder(itemView);
     }
 

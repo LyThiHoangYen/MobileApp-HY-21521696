@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.content.Intent;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,11 +30,19 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class tom_tat__diem_danh extends AppCompatActivity implements CalendarAdapter.OnItemListener {
     private TextView monthYearText;
@@ -41,40 +50,96 @@ public class tom_tat__diem_danh extends AppCompatActivity implements CalendarAda
     private LocalDate selectDate;
     private RecyclerView lvitems;
     private Toolbar toolbar1;
+    private ProgressBar progressBar;
+    private List<diemdanh> diemdanhList;
+    private RecycleViewData adapter;
+    
+    private FirebaseAuth auth;
+    private FirebaseFirestore db;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tom_tat__diem_danh);
 
+        // Khởi tạo Firebase
+        auth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         initWidgets();
-        selectDate= LocalDate.now();
+        selectDate = LocalDate.now();
         setMonthView();
         toolbar1 = (Toolbar) findViewById(R.id.toolbar1);
         toolbar1.setTitle("Tóm tắt điểm danh");
         setSupportActionBar(toolbar1);
-//        ActionBar actionBar = getSupportActionBar();
-//        actionBar.setTitle("Tóm tắt điểm danh"); //Thiết lập tiêu đề nếu muốn
-//        String title = actionBar.getTitle().toString(); //Lấy tiêu đề nếu muốn
-////        actionBar.hide(); //Ẩn ActionBar nếu muốn
-//
-//
-//        actionBar.setDisplayShowHomeEnabled(true);
-////        actionBar.setLogo(R.mipmap.back);    //Icon muốn hiện thị
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        List<diemdanh> diemdanh= new ArrayList<diemdanh>();
-        diemdanh.add(new diemdanh("2021-04-04","Làm việc 8 tiếng tại BKHCM College","8:00-16:00"));
-        diemdanh.add(new diemdanh("2021-04-05","Làm việc 8 tiếng tại BKHCM College","8:00-16:00"));
-        diemdanh.add(new diemdanh("2021-04-05","Làm việc 8 tiếng tại BKHCM College","8:00-16:00"));
-        diemdanh.add(new diemdanh("2021-04-05","Làm việc 8 tiếng tại BKHCM College","8:00-16:00"));
-        diemdanh.add(new diemdanh("2021-04-05","Làm việc 8 tiếng tại BKHCM College","8:00-16:00"));
-        lvitems=(RecyclerView) findViewById(R.id.recycle_result);
-        LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        
+        // Thiết lập ProgressBar
+        progressBar = findViewById(R.id.progressBar);
+        
+        // Thiết lập RecyclerView
+        diemdanhList = new ArrayList<>();
+        lvitems = (RecyclerView) findViewById(R.id.recycle_result);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         lvitems.setLayoutManager(layoutManager);
         lvitems.setHasFixedSize(true);
-        lvitems.setAdapter(new RecycleViewData(this,diemdanh));
+        
+        adapter = new RecycleViewData(this, diemdanhList);
+        lvitems.setAdapter(adapter);
+        
+        // Tải dữ liệu điểm danh từ Firestore
+        loadAttendanceData();
     }
-
+    
+    private void loadAttendanceData() {
+        if (auth.getCurrentUser() == null) {
+            Toast.makeText(this, "Vui lòng đăng nhập để xem lịch sử", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        
+        String userId = auth.getCurrentUser().getUid();
+        progressBar.setVisibility(View.VISIBLE);
+        
+        // Lấy lịch sử điểm danh từ Firestore, sắp xếp theo thời gian giảm dần
+        db.collection("attendance")
+            .whereEqualTo("userId", userId)
+            .orderBy("timestamp", Query.Direction.DESCENDING)
+            .get()
+            .addOnSuccessListener(queryDocumentSnapshots -> {
+                progressBar.setVisibility(View.GONE);
+                diemdanhList.clear();
+                
+                if (queryDocumentSnapshots.isEmpty()) {
+                    Toast.makeText(this, "Không có dữ liệu điểm danh", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                
+                SimpleDateFormat displayDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                
+                for (int i = 0; i < queryDocumentSnapshots.size(); i++) {
+                    Map<String, Object> data = queryDocumentSnapshots.getDocuments().get(i).getData();
+                    Date timestamp = (Date) data.get("timestamp");
+                    String date = displayDateFormat.format(timestamp);
+                    String time = (String) data.get("time");
+                    String type = (String) data.get("type");
+                    
+                    String content;
+                    if (type.equals("check_in")) {
+                        content = "Điểm danh vào lúc " + time;
+                    } else {
+                        content = "Điểm danh ra lúc " + time;
+                    }
+                    
+                    diemdanhList.add(new diemdanh(date, content, time));
+                }
+                
+                adapter.notifyDataSetChanged();
+            })
+            .addOnFailureListener(e -> {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(this, "Lỗi tải dữ liệu: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            });
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -137,8 +202,66 @@ public class tom_tat__diem_danh extends AppCompatActivity implements CalendarAda
 
     @Override
     public void onItemClick(int position, String dayText) {
-        String message ="Selected Date " + dayText + " " + monthYearFromDate(selectDate);
-        Toast.makeText(this,message,Toast.LENGTH_LONG).show();
+        if (!dayText.isEmpty()) {
+            // Khi người dùng nhấp vào một ngày cụ thể, lọc và hiển thị dữ liệu cho ngày đó
+            filterAttendanceDataByDay(dayText);
+        }
+    }
+    
+    private void filterAttendanceDataByDay(String dayText) {
+        // Lấy tháng và năm từ selectDate
+        int month = selectDate.getMonthValue();
+        int year = selectDate.getYear();
+        
+        // Tạo chuỗi ngày định dạng yyyy-MM-dd để so sánh với dữ liệu Firebase
+        String selectedDay = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month, Integer.parseInt(dayText));
+        
+        if (auth.getCurrentUser() == null) {
+            return;
+        }
+        
+        String userId = auth.getCurrentUser().getUid();
+        progressBar.setVisibility(View.VISIBLE);
+        
+        db.collection("attendance")
+            .whereEqualTo("userId", userId)
+            .whereEqualTo("date", selectedDay)
+            .orderBy("timestamp", Query.Direction.ASCENDING)
+            .get()
+            .addOnSuccessListener(queryDocumentSnapshots -> {
+                progressBar.setVisibility(View.GONE);
+                diemdanhList.clear();
+                
+                if (queryDocumentSnapshots.isEmpty()) {
+                    Toast.makeText(this, "Không có dữ liệu điểm danh cho ngày " + dayText, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                
+                SimpleDateFormat displayDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                
+                for (int i = 0; i < queryDocumentSnapshots.size(); i++) {
+                    Map<String, Object> data = queryDocumentSnapshots.getDocuments().get(i).getData();
+                    Date timestamp = (Date) data.get("timestamp");
+                    String date = displayDateFormat.format(timestamp);
+                    String time = (String) data.get("time");
+                    String type = (String) data.get("type");
+                    
+                    String content;
+                    if (type.equals("check_in")) {
+                        content = "Điểm danh vào lúc " + time;
+                    } else {
+                        content = "Điểm danh ra lúc " + time;
+                    }
+                    
+                    diemdanhList.add(new diemdanh(date, content, time));
+                }
+                
+                adapter.notifyDataSetChanged();
+            })
+            .addOnFailureListener(e -> {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(this, "Lỗi tải dữ liệu: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            });
     }
 
     private String monthYearFromDate(LocalDate selectDate) {

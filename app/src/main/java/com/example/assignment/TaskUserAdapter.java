@@ -75,6 +75,9 @@ public class TaskUserAdapter extends RecyclerView.Adapter <TaskUserAdapter.MyVie
                     Toast.makeText(v.getContext(), taskName.getText().toString(), Toast.LENGTH_LONG).show();
                     switch (taskName.getText().toString()) {
                         case "Điểm danh/ Chấm công": {
+                            AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                            Intent intent = new Intent(v.getContext(), DiemDanhActivity.class);
+                            activity.startActivity(intent);
                             break;
                         }
                         case "Tóm tắt chấm công": {
