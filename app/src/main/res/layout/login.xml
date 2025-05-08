@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
 
+    <!--ảnh nền-->
     <ImageView
         android:id="@+id/imageView9"
         android:layout_width="match_parent"
@@ -18,6 +19,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5" />
 
+    <!--là cái màn đè lên ảnh nền-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -25,6 +27,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Add progress bar for login loading -->
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:id="@+id/linearLayout12"
@@ -38,6 +51,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+
             <ImageView
                 android:id="@+id/imageView10"
                 android:layout_width="match_parent"
@@ -45,20 +59,23 @@
                 android:layout_weight="0"
                 app:srcCompat="@drawable/logo" />
 
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0"
                 android:orientation="vertical">
 
+
                 <TextView
                     android:id="@+id/textView17"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal|center_vertical"
-                    android:text="Priya"
+                    android:text="Swifty"
                     android:textColor="#FFFFFF"
                     android:textSize="40sp" />
+
 
                 <TextView
                     android:id="@+id/textView18"
@@ -73,6 +90,8 @@
         </LinearLayout>
 
 
+
+
         <LinearLayout
             android:id="@+id/linearLayout10"
             android:layout_width="wrap_content"
@@ -84,11 +103,13 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent">
 
+
             <View
                 android:layout_width="79dp"
                 android:layout_height="2dp"
                 android:layout_marginTop="15dp"
                 android:background="#AEAEAE" />
+
 
             <TextView
                 android:id="@+id/textView21"
@@ -101,12 +122,14 @@
                 android:textColor="#000000"
                 android:textSize="18sp" />
 
+
             <View
                 android:layout_width="79dp"
                 android:layout_height="2dp"
                 android:layout_marginTop="15dp"
                 android:background="#AEAEAE" />
         </LinearLayout>
+
 
         <LinearLayout
             android:id="@+id/linearLayout11"
@@ -119,6 +142,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
 
+
             <TextView
                 android:id="@+id/textView19"
                 android:layout_width="190dp"
@@ -126,9 +150,10 @@
                 android:layout_weight="0"
                 android:fontFamily="@font/roboto_black"
                 android:gravity="center_horizontal|center_vertical"
-                android:text="Dont’t have Login Details?"
+                android:text="Dont't have Login Details?"
                 android:textColor="#000000"
                 android:textSize="18sp" />
+
 
             <TextView
                 android:id="@+id/textView20"
@@ -140,6 +165,7 @@
                 android:textColor="#363B7E"
                 android:textSize="18sp" />
         </LinearLayout>
+
 
         <Button
             android:id="@+id/button8"
@@ -157,6 +183,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout13" />
 
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/linearLayout13"
             android:layout_width="0dp"
@@ -169,6 +196,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout12">
 
+
             <TextView
                 android:id="@+id/textView22"
                 android:layout_width="0dp"
@@ -177,12 +205,13 @@
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/roboto_black"
                 android:gravity="center_horizontal|center_vertical"
-                android:text="Đăng nhập"
+                android:text="Login"
                 android:textColor="#000000"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
 
             <LinearLayout
                 android:id="@+id/constraintLayout2"
@@ -196,6 +225,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView22">
 
+
                 <ImageView
                     android:id="@+id/imageView11"
                     android:layout_width="wrap_content"
@@ -205,6 +235,21 @@
                     android:layout_weight="0"
                     app:srcCompat="@drawable/user_color" />
 
+
+                <!-- EMAIL / ID NHÂN VIÊN -->
+                <EditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="ID nhân viên"
+                    android:inputType="textEmailAddress"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    android:gravity="center_vertical"/>
+
+
+                <!--
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -212,8 +257,9 @@
                     android:gravity="center_vertical"
                     android:hint="ID nhân viên"
                     android:textColor="#000000"
-                    android:textSize="14sp" />
+                    android:textSize="14sp" />-->
             </LinearLayout>
+
 
             <LinearLayout
                 android:id="@+id/linearLayout16"
@@ -229,6 +275,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
 
+
                 <ImageView
                     android:id="@+id/imageView12"
                     android:layout_width="wrap_content"
@@ -238,13 +285,25 @@
                     android:layout_weight="0"
                     app:srcCompat="@drawable/lock" />
 
+                <!-- MẬT KHẨU -->
+                <EditText
+                    android:id="@+id/etPass"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Mật khẩu"
+                    android:inputType="textPassword"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="14sp"/>
+
+                <!--
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:fontFamily="@font/roboto_medium"
                     android:hint="Mật khẩu"
-                    android:textSize="14sp" />
+                    android:textSize="14sp" />-->
             </LinearLayout>
+
 
             <LinearLayout
                 android:id="@+id/linearLayout17"
@@ -258,6 +317,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout16">
 
+
                 <TextView
                     android:id="@+id/textView23"
                     android:layout_width="wrap_content"
@@ -267,6 +327,7 @@
                     android:text="Reset"
                     android:textColor="#302980"
                     android:textSize="14sp" />
+
 
                 <TextView
                     android:id="@+id/textView24"
@@ -281,5 +342,6 @@
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
