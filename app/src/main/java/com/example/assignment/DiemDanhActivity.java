@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -80,8 +81,18 @@ public class DiemDanhActivity extends AppCompatActivity {
         
         // Xử lý sự kiện xem lịch sử chấm công
         btnViewHistory.setOnClickListener(v -> {
-            Intent intent = new Intent(DiemDanhActivity.this, tom_tat__diem_danh.class);
-            startActivity(intent);
+            try {
+                Log.d("DiemDanhActivity", "Starting attendance history activity");
+                Intent intent = new Intent(DiemDanhActivity.this, tom_tat__diem_danh.class);
+                // Don't add FLAG_ACTIVITY_NEW_TASK as that can disrupt the back stack
+                startActivity(intent);
+                // Don't finish this activity - keep it in the back stack
+                // Also display a message to assure the user
+                Toast.makeText(DiemDanhActivity.this, "Đang mở trang lịch sử điểm danh...", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                Toast.makeText(DiemDanhActivity.this, "Không thể mở trang lịch sử điểm danh: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
         });
     }
 
@@ -171,9 +182,16 @@ public class DiemDanhActivity extends AppCompatActivity {
     private void updateAttendanceStatus() {
         String statusMessage = "";
         if (hasCheckIn && hasCheckOut) {
+            // Hiển thị trạng thái ngắn hạn (3 giây) rồi ẩn đi
             statusMessage = "Điểm danh vào thành công lúc " + checkInTime + "\n" + 
                            "Điểm danh ra thành công lúc " + checkOutTime;
             showAttendanceStatus(statusMessage, true);
+            
+            // Sau 3 giây, trả màn hình về trạng thái mặc định
+            new Handler().postDelayed(() -> {
+                resetScreenToDefault();
+            }, 3000);
+            
             btnCheckIn.setEnabled(false);
             btnCheckOut.setEnabled(false);
         } else if (hasCheckIn) {
@@ -183,9 +201,15 @@ public class DiemDanhActivity extends AppCompatActivity {
             btnCheckIn.setEnabled(false);
             btnCheckOut.setEnabled(true);
         } else {
-            btnCheckIn.setEnabled(true);
-            btnCheckOut.setEnabled(false);
+            resetScreenToDefault();
         }
+    }
+
+    // Hàm mới để reset màn hình về trạng thái mặc định
+    private void resetScreenToDefault() {
+        tvStatus.setVisibility(View.GONE);
+        btnCheckIn.setEnabled(true);
+        btnCheckOut.setEnabled(false);
     }
 
     private void doDiemDanh(String type) {
@@ -245,6 +269,23 @@ public class DiemDanhActivity extends AppCompatActivity {
                             hasCheckOut = true;
                             checkOutTime = timeString;
                             btnCheckOut.setEnabled(false);
+                            
+                            // Hiển thị trạng thái checkout thành công trong 3 giây
+                            String message = "Điểm danh ra thành công lúc " + timeString;
+                            showAttendanceStatus(message, true);
+                            
+                            // Sau 3 giây, đặt lại màn hình cho ngày làm việc mới
+                            new Handler().postDelayed(() -> {
+                                // Reset trạng thái cho ngày làm việc mới
+                                hasCheckIn = false;
+                                hasCheckOut = false;
+                                checkInTime = "";
+                                checkOutTime = "";
+                                resetScreenToDefault();
+                            }, 3000);
+                            
+                            Toast.makeText(DiemDanhActivity.this, "Đã lưu điểm danh ra thành công", Toast.LENGTH_SHORT).show();
+                            return;
                         }
                         
                         String message = type.equals("check_in") ? 
@@ -284,6 +325,23 @@ public class DiemDanhActivity extends AppCompatActivity {
                             hasCheckOut = true;
                             checkOutTime = timeString;
                             btnCheckOut.setEnabled(false);
+                            
+                            // Hiển thị trạng thái checkout thành công trong 3 giây
+                            String message = "Điểm danh ra thành công lúc " + timeString;
+                            showAttendanceStatus(message, true);
+                            
+                            // Sau 3 giây, đặt lại màn hình cho ngày làm việc mới
+                            new Handler().postDelayed(() -> {
+                                // Reset trạng thái cho ngày làm việc mới
+                                hasCheckIn = false;
+                                hasCheckOut = false;
+                                checkInTime = "";
+                                checkOutTime = "";
+                                resetScreenToDefault();
+                            }, 3000);
+                            
+                            Toast.makeText(DiemDanhActivity.this, "Đã lưu điểm danh cơ bản thành công", Toast.LENGTH_SHORT).show();
+                            return;
                         }
                         
                         String message = type.equals("check_in") ? 
