@@ -19,6 +19,7 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressBar progress;
     private Button btnLogin;
     private TextView tvReset, tvForgot;
+    private View loginButton;
 
     private FirebaseAuth auth;
     private FirebaseFirestore db;
@@ -32,16 +33,16 @@ public class LoginActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etPass = findViewById(R.id.etPass);
         progress = findViewById(R.id.progress);
-        btnLogin = findViewById(R.id.button8);      // hoặc R.id.btnLogin nếu đã đổi id
         tvReset = findViewById(R.id.textView23);
         tvForgot = findViewById(R.id.textView24);
+        loginButton = findViewById(R.id.loginButtonCard);
 
         // Init Firebase
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
         // Bấm LOGIN
-        btnLogin.setOnClickListener(v -> doLogin());
+        loginButton.setOnClickListener(v -> doLogin());
         
         // Reset button
         tvReset.setOnClickListener(v -> {
