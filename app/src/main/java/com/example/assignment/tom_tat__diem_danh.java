@@ -39,6 +39,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 public class tom_tat__diem_danh extends AppCompatActivity implements CalendarAdapter.OnItemListener {
     private static final String TAG = "TomTatDiemDanh";
@@ -69,42 +71,29 @@ public class tom_tat__diem_danh extends AppCompatActivity implements CalendarAda
             Log.d(TAG, "onCreate: Initializing tom_tat__diem_danh activity");
             initWidgets();
             
-            // Kiểm tra phiên bản API để sử dụng LocalDate (chỉ có từ API 26+)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                selectDate = LocalDate.now();
-            } else {
-                // Với các phiên bản API cũ hơn, không làm gì và xử lý trong setMonthView
-                Toast.makeText(this, "Thiết bị của bạn đang chạy phiên bản Android cũ, có thể gặp một số hạn chế", Toast.LENGTH_SHORT).show();
-            }
-            
-            setMonthView();
+            // Set up the toolbar
             toolbar1 = findViewById(R.id.toolbar1);
-            toolbar1.setTitle("Tóm tắt điểm danh");
+            toolbar1.setTitle("Chấm công");
             setSupportActionBar(toolbar1);
             if (getSupportActionBar() != null) {
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             }
             
-            // Thiết lập ProgressBar và Error View
-            progressBar = findViewById(R.id.progressBar);
-            errorCard = findViewById(R.id.errorCard);
-            errorText = findViewById(R.id.errorText);
+            // Handle back button
+            ImageButton backButton = findViewById(R.id.backButton);
+            backButton.setOnClickListener(v -> onBackPressed());
             
-            // Ẩn thông báo lỗi
-            errorCard.setVisibility(View.GONE);
+            // Set up the attendance stats
+            TextView lateDaysCount = findViewById(R.id.lateDaysCount);
+            TextView attendanceCount = findViewById(R.id.attendanceCount);
+            TextView invalidAttendanceCount = findViewById(R.id.invalidAttendanceCount);
             
-            // Thiết lập RecyclerView
-            diemdanhList = new ArrayList<>();
-            lvitems = findViewById(R.id.recycle_result);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-            lvitems.setLayoutManager(layoutManager);
-            lvitems.setHasFixedSize(true);
+            // Load stats from Firestore
+            if (auth.getCurrentUser() != null) {
+                loadAttendanceStats();
+                loadRecentAttendance();
+            }
             
-            adapter = new RecycleViewData(this, diemdanhList);
-            lvitems.setAdapter(adapter);
-            
-            // Tải dữ liệu điểm danh từ Firestore
-            loadAttendanceData();
         } catch (Exception e) {
             // Handle any initialization exceptions
             Log.e(TAG, "onCreate Error: ", e);
@@ -139,10 +128,11 @@ public class tom_tat__diem_danh extends AppCompatActivity implements CalendarAda
         super.onResume();
         Log.d(TAG, "onResume: Refreshing data");
         
-        // Reload data when returning to the activity
+        // Tải lại dữ liệu thống kê và lịch sử gần đây khi quay lại màn hình
         try {
-            if (diemdanhList.isEmpty()) {
-                loadAttendanceData();
+            if (auth.getCurrentUser() != null) {
+                loadAttendanceStats();
+                loadRecentAttendance();
             }
         } catch (Exception e) {
             Log.e(TAG, "Error in onResume: ", e);
@@ -159,189 +149,27 @@ public class tom_tat__diem_danh extends AppCompatActivity implements CalendarAda
     }
     
     private void loadAttendanceData() {
-        if (auth.getCurrentUser() == null) {
-            Toast.makeText(this, "Vui lòng đăng nhập để xem lịch sử", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        
-        String userId = auth.getCurrentUser().getUid();
-        progressBar.setVisibility(View.VISIBLE);
-        errorCard.setVisibility(View.GONE);
-        
-        try {
-            Log.d(TAG, "Loading attendance data for user: " + userId);
-            // Sử dụng truy vấn đơn giản không yêu cầu index
-            loadAttendanceWithoutIndex(userId);
-        } catch (Exception e) {
-            Log.e(TAG, "Error loading attendance data: ", e);
-            progressBar.setVisibility(View.GONE);
-            showError("Lỗi tải dữ liệu: " + e.getMessage(), true);
-            Toast.makeText(this, "Không thể tải dữ liệu điểm danh", Toast.LENGTH_LONG).show();
-        }
+        // Phương thức này không còn được sử dụng trong UI mới
+        // Chỉ ghi log để gỡ lỗi
+        Log.d(TAG, "loadAttendanceData: Không còn sử dụng trong UI mới");
     }
     
-    // Phương thức tải dữ liệu không sử dụng compound query (không cần index)
     private void loadAttendanceWithoutIndex(String userId) {
-        // Hiển thị progress bar và thông báo
-        progressBar.setVisibility(View.VISIBLE);
-        Toast.makeText(this, "Đang tải dữ liệu điểm danh...", Toast.LENGTH_SHORT).show();
-        
-        // Truy vấn đơn giản chỉ với điều kiện userId
-        db.collection("attendance")
-            .whereEqualTo("userId", userId)
-            .get()
-            .addOnSuccessListener(queryDocumentSnapshots -> {
-                progressBar.setVisibility(View.GONE);
-                diemdanhList.clear();
-                
-                if (queryDocumentSnapshots.isEmpty()) {
-                    Log.d(TAG, "No attendance data found");
-                    showError("Không có dữ liệu điểm danh", false);
-                    return;
-                }
-                
-                Log.d(TAG, "Data retrieved from Firestore: " + queryDocumentSnapshots.size() + " documents");
-                
-                // Xử lý dữ liệu mà không cần phụ thuộc vào trường timestamp
-                SimpleDateFormat displayDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-                
-                for (int i = 0; i < queryDocumentSnapshots.size(); i++) {
-                    try {
-                        Map<String, Object> data = queryDocumentSnapshots.getDocuments().get(i).getData();
-                        
-                        // Lấy dữ liệu ngày và giờ
-                        String date = (String) data.get("date");
-                        String time = (String) data.get("time");
-                        String type = (String) data.get("type");
-                        
-                        // Kiểm tra và xử lý dữ liệu null
-                        if (date == null) {
-                            // Nếu không có trường date, thử lấy từ timestamp
-                            Object timestampObj = data.get("timestamp");
-                            if (timestampObj instanceof Date) {
-                                Date timestamp = (Date) timestampObj;
-                                date = displayDateFormat.format(timestamp);
-                            } else {
-                                // Nếu không có cả date và timestamp, sử dụng ngày hôm nay
-                                date = displayDateFormat.format(new Date());
-                            }
-                        } else {
-                            // Chuyển đổi định dạng date từ yyyy-MM-dd sang dd/MM/yyyy
-                            try {
-                                SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                                Date parsedDate = inputFormat.parse(date);
-                                if (parsedDate != null) {
-                                    date = displayDateFormat.format(parsedDate);
-                                }
-                            } catch (Exception e) {
-                                // Nếu không thể chuyển đổi, giữ nguyên giá trị
-                                Log.e(TAG, "Error formatting date: " + e.getMessage());
-                            }
-                        }
-                        
-                        if (time == null) time = "--:--:--";
-                        if (type == null) type = "check_in"; // Mặc định là check-in nếu không có loại
-                        
-                        String content;
-                        if (type.equals("check_in")) {
-                            content = "Điểm danh vào lúc " + time;
-                        } else {
-                            content = "Điểm danh ra lúc " + time;
-                        }
-                        
-                        diemdanhList.add(new diemdanh(date, content, time));
-                        Log.d(TAG, "Added record: " + date + " - " + content);
-                    } catch (Exception e) {
-                        Log.e(TAG, "Error processing document at index " + i + ": " + e.getMessage());
-                        // Vẫn tiếp tục xử lý các bản ghi khác
-                    }
-                }
-                
-                // Sắp xếp danh sách theo ngày giảm dần (mới nhất lên đầu)
-                try {
-                    diemdanhList.sort((item1, item2) -> {
-                        try {
-                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-                            Date date1 = sdf.parse(item1.getDate());
-                            Date date2 = sdf.parse(item2.getDate());
-                            if (date1 != null && date2 != null) {
-                                return date2.compareTo(date1); // Sắp xếp giảm dần
-                            }
-                        } catch (Exception e) {
-                            Log.e(TAG, "Error sorting dates: " + e.getMessage());
-                        }
-                        return 0;
-                    });
-                } catch (Exception e) {
-                    Log.e(TAG, "Error sorting list: " + e.getMessage());
-                }
-                
-                Log.d(TAG, "Processed " + diemdanhList.size() + " attendance records");
-                
-                if (diemdanhList.isEmpty()) {
-                    showError("Không có dữ liệu điểm danh", false);
-                } else {
-                    errorCard.setVisibility(View.GONE);
-                    adapter.notifyDataSetChanged();
-                    
-                    // Scroll to top
-                    if (lvitems != null) {
-                        lvitems.scrollToPosition(0);
-                    }
-                }
-            })
-            .addOnFailureListener(e -> {
-                Log.e(TAG, "Firestore query error: ", e);
-                progressBar.setVisibility(View.GONE);
-                showError("Lỗi: " + e.getMessage(), true);
-                
-                // Hiển thị thông báo lỗi
-                Toast.makeText(this, "Không thể tải dữ liệu: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            });
+        // Phương thức này không còn được sử dụng trong UI mới
+        Log.d(TAG, "loadAttendanceWithoutIndex: Không còn sử dụng trong UI mới");
     }
 
     private void showError(String message, boolean isFirebaseError) {
-        Log.d(TAG, "Showing error: " + message + ", isFirebaseError: " + isFirebaseError);
-        errorCard.setVisibility(View.VISIBLE);
-        
-        if (isFirebaseError && message.contains("FAILED_PRECONDITION")) {
-            // Lấy URL tạo index từ thông báo lỗi (nếu có)
-            String indexUrl = "";
-            if (message.contains("https://")) {
-                int startIndex = message.indexOf("https://");
-                indexUrl = message.substring(startIndex);
-            }
-            
-            if (!indexUrl.isEmpty()) {
-                // Nếu có URL, lưu vào bộ nhớ để quản trị viên có thể sử dụng sau này
-                saveIndexUrl(indexUrl);
-                
-                errorText.setText("Lỗi:\nCần tạo chỉ mục (index) cho Firebase Firestore\n\n" +
-                        "Đã lưu đường dẫn tạo index để quản trị viên xử lý.");
-            } else {
-                errorText.setText("Lỗi:\nCần tạo chỉ mục (index) cho Firebase Firestore\n\n" +
-                        "Vui lòng thông báo cho quản trị viên để khắc phục lỗi này.");
-            }
-        } else if (message.contains("Không có dữ liệu")) {
-            errorText.setText("Lỗi:\nKhông thể xử lý dữ liệu điểm danh\n\nVui lòng thông báo cho quản trị viên để khắc phục lỗi này.");
-        } else {
-            errorText.setText("Lỗi:\n" + message);
-        }
-        
-        // Hiển thị thông báo Toast để người dùng biết
+        // Phương thức này không còn được sử dụng trong UI mới
+        // Thay vào đó, hiển thị Toast và ghi log
+        Log.e(TAG, "Error: " + message);
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
     
     // Lưu URL tạo index để sử dụng sau này
     private void saveIndexUrl(String url) {
-        // Lưu URL vào SharedPreferences để sử dụng sau này
-        getSharedPreferences("FirebaseIndexErrors", MODE_PRIVATE)
-            .edit()
-            .putString("lastIndexUrl", url)
-            .apply();
-            
-        // Log URL để dễ dàng truy cập trong quá trình phát triển/debug
-        Log.d(TAG, "Firebase Index URL: " + url);
+        // Phương thức này không còn được sử dụng trong UI mới
+        Log.d(TAG, "saveIndexUrl: Không còn sử dụng trong UI mới");
     }
 
     @Override
@@ -369,11 +197,30 @@ public class tom_tat__diem_danh extends AppCompatActivity implements CalendarAda
     }
     
     private void initWidgets() {
-        calendarRecyclerView = findViewById(R.id.calendarRecycleView);
-        monthYearText = findViewById(R.id.monthYearTV);
+        // Chỉ khởi tạo các thành phần UI có trong layout mới
+        progressBar = findViewById(R.id.progressBar);
+        
+        // Chúng ta không cần những biến này trong UI mới, đặt chúng thành null
+        monthYearText = null;  
+        calendarRecyclerView = null;
+        errorCard = null;
+        errorText = null;
+        lvitems = null;
+        
+        // Tạo danh sách trống để tránh NullPointerException
+        diemdanhList = new ArrayList<>();
+        
+        // Ghi log cho mục đích gỡ lỗi
+        Log.d(TAG, "initWidgets: Khởi tạo widgets cho layout UI mới");
     }
 
     private void setMonthView() {
+        // Since we don't have the calendar functionality in the new UI,
+        // we'll just log a message and return
+        Log.d(TAG, "setMonthView: Calendar view not supported in new UI");
+        
+        // Comment out the old implementation
+        /*
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Sử dụng API mới (LocalDate) nếu phiên bản Android hỗ trợ
             monthYearText.setText(monthYearFromDate(selectDate));
@@ -394,6 +241,7 @@ public class tom_tat__diem_danh extends AppCompatActivity implements CalendarAda
             calendarRecyclerView.setLayoutManager(layoutManager);
             calendarRecyclerView.setAdapter(calendarAdapter);
         }
+        */
     }
 
     // Phương thức thay thế cho các phiên bản Android cũ
@@ -433,159 +281,186 @@ public class tom_tat__diem_danh extends AppCompatActivity implements CalendarAda
 
     @Override
     public void onItemClick(int position, String dayText) {
-        if (!dayText.isEmpty()) {
-            // Khi người dùng nhấp vào một ngày cụ thể, lọc và hiển thị dữ liệu cho ngày đó
-            filterAttendanceDataByDay(dayText);
-        }
+        // Calendar view is not used in the new UI
+        Log.d(TAG, "onItemClick: Calendar functionality not used in new UI");
     }
     
     private void filterAttendanceDataByDay(String dayText) {
-        // Lấy tháng và năm từ ngày hiện tại
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH) + 1; // Calendar.MONTH bắt đầu từ 0
-        
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // Sử dụng LocalDate nếu có
-            month = selectDate.getMonthValue();
-            year = selectDate.getYear();
-        }
-        
-        // Tạo chuỗi ngày định dạng yyyy-MM-dd để so sánh với dữ liệu Firebase
-        String selectedDay = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month, Integer.parseInt(dayText));
-        
-        if (auth.getCurrentUser() == null) {
-            return;
-        }
-        
-        String userId = auth.getCurrentUser().getUid();
-        progressBar.setVisibility(View.VISIBLE);
-        errorCard.setVisibility(View.GONE);
-        
-        try {
-            Log.d(TAG, "Filtering attendance for day: " + selectedDay);
-            // Sử dụng phương thức không cần index
-            filterAttendanceByDayWithoutIndex(userId, selectedDay, dayText);
-        } catch (Exception e) {
-            Log.e(TAG, "Error filtering by day: ", e);
-            progressBar.setVisibility(View.GONE);
-            showError("Lỗi: " + e.getMessage(), true);
-        }
+        // Phương thức này không còn được sử dụng trong UI mới
+        Log.d(TAG, "filterAttendanceDataByDay: Không còn sử dụng trong UI mới");
     }
     
-    // Phương thức lọc dữ liệu theo ngày không sử dụng compound query
     private void filterAttendanceByDayWithoutIndex(String userId, String selectedDay, String dayText) {
-        // Truy vấn chỉ với điều kiện userId
+        // Phương thức này không còn được sử dụng trong UI mới
+        Log.d(TAG, "filterAttendanceByDayWithoutIndex: Không còn sử dụng trong UI mới");
+    }
+
+    private String monthYearFromDate(LocalDate selectDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMMM yyyy");
+        return selectDate.format(formatter);
+    }
+
+    // New method to load attendance stats
+    private void loadAttendanceStats() {
+        String userId = auth.getCurrentUser().getUid();
+        
+        // Show loading
         progressBar.setVisibility(View.VISIBLE);
-        Toast.makeText(this, "Đang lọc dữ liệu cho ngày " + dayText, Toast.LENGTH_SHORT).show();
+        
+        // Get the current month and year
+        Calendar calendar = Calendar.getInstance();
+        int currentMonth = calendar.get(Calendar.MONTH) + 1; // Calendar months are 0-based
+        int currentYear = calendar.get(Calendar.YEAR);
         
         db.collection("attendance")
             .whereEqualTo("userId", userId)
             .get()
             .addOnSuccessListener(queryDocumentSnapshots -> {
                 progressBar.setVisibility(View.GONE);
-                diemdanhList.clear();
                 
-                if (queryDocumentSnapshots.isEmpty()) {
-                    showError("Không có dữ liệu điểm danh", false);
-                    return;
-                }
+                int totalAttendance = 0;
+                int lateCount = 0;
+                int invalidCount = 0;
                 
-                Log.d(TAG, "Filtering data for date: " + selectedDay);
-                SimpleDateFormat displayDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-                
-                // Chuyển định dạng selectedDay từ yyyy-MM-dd sang dd/MM/yyyy để hiển thị
-                String displayDate = "";
-                try {
-                    SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                    Date parsedDate = inputFormat.parse(selectedDay);
-                    if (parsedDate != null) {
-                        displayDate = displayDateFormat.format(parsedDate);
-                    }
-                } catch (Exception e) {
-                    displayDate = dayText + "/" + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ? 
-                            selectDate.getMonthValue() : (Calendar.getInstance().get(Calendar.MONTH) + 1)) + "/" + 
-                            (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ? 
-                            selectDate.getYear() : Calendar.getInstance().get(Calendar.YEAR));
-                }
-                
-                final String formattedDisplayDate = displayDate;
-                
-                // Đếm số bản ghi hợp lệ
-                int recordCount = 0;
-                
-                // Lọc dữ liệu theo ngày được chọn
+                // Process data
                 for (int i = 0; i < queryDocumentSnapshots.size(); i++) {
                     try {
                         Map<String, Object> data = queryDocumentSnapshots.getDocuments().get(i).getData();
-                        String date = (String) data.get("date");
                         
-                        // Nếu date khớp với ngày đã chọn, thêm vào danh sách
-                        if (selectedDay.equals(date)) {
-                            recordCount++;
+                        // Count only records from current month
+                        String date = (String) data.get("date");
+                        if (date != null && date.startsWith(currentYear + "-" + String.format("%02d", currentMonth))) {
+                            totalAttendance++;
                             
+                            // Check if late (after 8:30 AM)
                             String time = (String) data.get("time");
                             String type = (String) data.get("type");
                             
-                            if (time == null) time = "--:--:--";
-                            if (type == null) type = "check_in";
-                            
-                            String content;
-                            if (type.equals("check_in")) {
-                                content = "Điểm danh vào lúc " + time;
-                            } else {
-                                content = "Điểm danh ra lúc " + time;
+                            if (type != null && type.equals("check_in") && time != null) {
+                                try {
+                                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+                                    Date checkInTime = sdf.parse(time);
+                                    Date lateTime = sdf.parse("08:30:00");
+                                    
+                                    if (checkInTime != null && lateTime != null && checkInTime.after(lateTime)) {
+                                        lateCount++;
+                                    }
+                                } catch (Exception e) {
+                                    Log.e(TAG, "Error parsing time: " + e.getMessage());
+                                }
                             }
                             
-                            diemdanhList.add(new diemdanh(formattedDisplayDate, content, time));
-                            Log.d(TAG, "Added filtered record: " + formattedDisplayDate + " - " + content);
+                            // Check if invalid (placeholder for your business logic)
+                            Boolean isValid = (Boolean) data.get("isValid");
+                            if (isValid != null && !isValid) {
+                                invalidCount++;
+                            }
                         }
                     } catch (Exception e) {
-                        Log.e(TAG, "Error processing document while filtering: " + e.getMessage());
+                        Log.e(TAG, "Error processing attendance record: " + e.getMessage());
                     }
                 }
                 
-                // Sắp xếp dữ liệu theo thời gian (nếu cần)
-                try {
-                    diemdanhList.sort((item1, item2) -> {
-                        try {
-                            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
-                            Date time1 = sdf.parse(item1.getTime());
-                            Date time2 = sdf.parse(item2.getTime());
-                            if (time1 != null && time2 != null) {
-                                return time1.compareTo(time2); // Sắp xếp tăng dần theo thời gian
-                            }
-                        } catch (Exception e) {
-                            Log.e(TAG, "Error sorting times: " + e.getMessage());
-                        }
-                        return 0;
-                    });
-                } catch (Exception e) {
-                    Log.e(TAG, "Error sorting filtered list: " + e.getMessage());
-                }
+                // Update UI
+                TextView attendanceCount = findViewById(R.id.attendanceCount);
+                TextView lateDaysCount = findViewById(R.id.lateDaysCount);
+                TextView invalidAttendanceCount = findViewById(R.id.invalidAttendanceCount);
                 
-                if (diemdanhList.isEmpty()) {
-                    showError("Không có dữ liệu điểm danh cho ngày " + dayText, false);
-                    return;
-                }
+                attendanceCount.setText(totalAttendance + " Lần");
+                lateDaysCount.setText(lateCount + " Lần");
+                invalidAttendanceCount.setText(invalidCount + " Lần");
                 
-                Log.d(TAG, "Found " + diemdanhList.size() + " records for day " + selectedDay);
-                errorCard.setVisibility(View.GONE);
-                adapter.notifyDataSetChanged();
-                
-                // Hiển thị thông báo
-                Toast.makeText(this, "Đã tìm thấy " + diemdanhList.size() + " bản ghi", Toast.LENGTH_SHORT).show();
             })
             .addOnFailureListener(e -> {
-                Log.e(TAG, "Firestore filter query error: ", e);
                 progressBar.setVisibility(View.GONE);
-                showError("Lỗi: " + e.getMessage(), true);
-                Toast.makeText(this, "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "Error loading attendance stats: " + e.getMessage());
+                Toast.makeText(this, "Lỗi tải dữ liệu thống kê", Toast.LENGTH_SHORT).show();
             });
     }
 
-    private String monthYearFromDate(LocalDate selectDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMMM yyyy");
-        return selectDate.format(formatter);
+    // New method to load the most recent attendance history
+    private void loadRecentAttendance() {
+        if (auth.getCurrentUser() == null) {
+            return;
+        }
+        
+        String userId = auth.getCurrentUser().getUid();
+        progressBar.setVisibility(View.VISIBLE);
+        
+        db.collection("attendance")
+            .whereEqualTo("userId", userId)
+            .orderBy("timestamp", com.google.firebase.firestore.Query.Direction.DESCENDING)
+            .limit(3) // Get only the 3 most recent records
+            .get()
+            .addOnSuccessListener(queryDocumentSnapshots -> {
+                progressBar.setVisibility(View.GONE);
+                
+                if (queryDocumentSnapshots.isEmpty()) {
+                    // No recent attendance records
+                    return;
+                }
+                
+                // Create a linear layout to hold the recent attendance items
+                LinearLayout recentAttendanceContainer = findViewById(R.id.recentAttendanceContainer);
+                if (recentAttendanceContainer != null) {
+                    // Clear any existing views
+                    recentAttendanceContainer.removeAllViews();
+                    
+                    // Add each recent attendance record
+                    for (int i = 0; i < queryDocumentSnapshots.size(); i++) {
+                        try {
+                            Map<String, Object> data = queryDocumentSnapshots.getDocuments().get(i).getData();
+                            
+                            String date = (String) data.get("date");
+                            String time = (String) data.get("time");
+                            
+                            // Format the date for display (from yyyy-MM-dd to dd/MM/yyyy)
+                            String displayDate = "";
+                            try {
+                                SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                                SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                                Date parsedDate = inputFormat.parse(date);
+                                if (parsedDate != null) {
+                                    displayDate = outputFormat.format(parsedDate);
+                                }
+                            } catch (Exception e) {
+                                displayDate = date; // Use as-is if parsing fails
+                            }
+                            
+                            // Create a TextView for this attendance record
+                            TextView attendanceRecord = new TextView(this);
+                            attendanceRecord.setText("Chấm công ngày " + displayDate + " - " + time);
+                            attendanceRecord.setTextSize(14);
+                            attendanceRecord.setPadding(
+                                    dpToPx(12), dpToPx(12), dpToPx(12), dpToPx(12));
+                            attendanceRecord.setBackgroundResource(android.R.color.darker_gray);
+                            
+                            // Create layout parameters with bottom margin
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.MATCH_PARENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT);
+                            if (i < queryDocumentSnapshots.size() - 1) {
+                                params.bottomMargin = dpToPx(8);
+                            }
+                            attendanceRecord.setLayoutParams(params);
+                            
+                            // Add to the container
+                            recentAttendanceContainer.addView(attendanceRecord);
+                        } catch (Exception e) {
+                            Log.e(TAG, "Error creating recent attendance record: " + e.getMessage());
+                        }
+                    }
+                }
+            })
+            .addOnFailureListener(e -> {
+                progressBar.setVisibility(View.GONE);
+                Log.e(TAG, "Error loading recent attendance: " + e.getMessage());
+            });
+    }
+    
+    // Helper method to convert dp to pixels
+    private int dpToPx(int dp) {
+        float density = getResources().getDisplayMetrics().density;
+        return Math.round(dp * density);
     }
 }
