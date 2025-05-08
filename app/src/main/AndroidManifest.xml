@@ -27,13 +27,24 @@
         <activity android:name=".ThemNhanVienActivity"     android:exported="false"/>
         <activity android:name=".ThongKeBaoCaoActivity"    android:exported="false"/>
         <activity android:name=".donxinphep"               android:exported="false"/>
-        <activity android:name=".tom_tat__diem_danh"       android:exported="false"/>
+        
+        <!-- Attendance Summary Activity with parent specified -->
+        <activity 
+            android:name=".tom_tat__diem_danh"       
+            android:exported="false"
+            android:parentActivityName=".DiemDanhActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".DiemDanhActivity" />
+        </activity>
+        
         <activity android:name=".MainActivity"             android:exported="false"/>
         <activity android:name=".DanhBaNhanSuActivity"     android:exported="false"/>
         <activity android:name=".ThongTinNhanVienActivity" android:exported="false"/>
         <activity android:name=".ManagerHomeActivity"      android:exported="false"/>
         <activity android:name=".HrHomeActivity"           android:exported="false"/>
-        <activity android:name=".DiemDanhActivity"         android:exported="false"/>
+        <activity android:name=".DiemDanhActivity"         android:exported="false" 
+                  android:launchMode="singleTop"/>
 
         <!-- Activity có theme riêng -->
         <activity
