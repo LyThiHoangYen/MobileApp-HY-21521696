@@ -95,6 +95,9 @@ public class TaskUserAdapter extends RecyclerView.Adapter <TaskUserAdapter.MyVie
                             break;
                         }
                         case "Tình trang đơn xin phép":{
+                            AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                            Intent intent = new Intent(v.getContext(), TinhTrangDonPhep.class);
+                            activity.startActivity(intent);
                             break;
                         }
                         case "Tạo thông báo": {

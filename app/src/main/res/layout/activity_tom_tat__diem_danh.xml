@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".tom_tat__diem_danh"
-    android:background="#FFFFFF">
+    android:background="#F0F2F5">
 
+    <!-- Header Toolbar -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="top"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -20,123 +20,51 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="#ff009d"
-            app:titleTextColor="#FFFFFF" />
+            app:titleTextColor="#FFFFFF">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageButton
+                    android:id="@+id/backButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@android:drawable/ic_menu_revert"
+                    android:tint="#FFFFFF"
+                    android:contentDescription="Back" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Chấm công"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="16dp" />
+
+                <ImageButton
+                    android:id="@+id/refreshButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@android:drawable/ic_menu_rotate"
+                    android:tint="#FFFFFF"
+                    android:contentDescription="Refresh" />
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout">
-
-        <Button
-            android:id="@+id/backMonth"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="preMonth"
-            android:text="BACK"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:backgroundTint="#ff009d" />
-
-        <TextView
-            android:id="@+id/monthYearTV"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:gravity="center_horizontal"
-            android:text="M 2025"
-            android:textAlignment="center"
-            android:textColor="#ff009d"
-            android:textSize="22sp"
-            android:textStyle="bold" />
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="nextMonth"
-            android:text="NEXT"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:backgroundTint="#ff009d" />
-    </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/calendarRecycleView"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginTop="8dp"
-        android:background="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"
-        android:padding="8dp"
-        android:text="Xem qua lịch sử báo danh"
-        android:textAlignment="center"
-        android:textColor="#ff009d"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/calendarRecycleView" />
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/attendanceCardView"
+    <!-- Main ScrollView for the content -->
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="16dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycle_result"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#FFFFFF"
-            android:padding="8dp"
-            android:clipToPadding="false" />
-
-    </androidx.cardview.widget.CardView>
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:indeterminateTint="#ff009d"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- Thông báo lỗi -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/errorCard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3">
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -144,30 +72,529 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <TextView
+            <!-- Stats Cards -->
+            <!-- Late Days Card -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Lỗi:"
-                android:textColor="#ff009d"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
 
-            <TextView
-                android:id="@+id/errorText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Cần tạo chỉ mục (index) cho Firebase Firestore"
-                android:textColor="#FF0000" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
 
-            <TextView
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/circular_background_orange"
+                        android:padding="8dp"
+                        android:src="@android:drawable/ic_menu_my_calendar"
+                        android:tint="#FFFFFF" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginStart="16dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Số lần đi muộn trong tháng"
+                            android:textColor="#666666"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/lateDaysCount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="2 Lần"
+                            android:textColor="#000000"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Attendance Management Card -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Vui lòng thông báo cho quản trị viên để khắc phục lỗi này."
-                android:textStyle="italic" />
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/circular_background_blue"
+                        android:padding="8dp"
+                        android:src="@android:drawable/ic_menu_info_details"
+                        android:tint="#FFFFFF" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginStart="16dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Quản lý dữ liệu điểm danh theo tháng"
+                            android:textColor="#666666"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/attendanceCount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="9 Lần"
+                            android:textColor="#000000"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Invalid Attendance Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/circular_background_red"
+                        android:padding="8dp"
+                        android:src="@android:drawable/ic_dialog_alert"
+                        android:tint="#FFFFFF" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginStart="16dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Điểm danh không hợp lệ trong tháng"
+                            android:textColor="#666666"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/invalidAttendanceCount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="0 Lần"
+                            android:textColor="#000000"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Weekly Attendance Chart Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Lịch sử chấm công trong tuần"
+                        android:textColor="#ff009d"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:drawablePadding="8dp"/>
+
+                    <!-- Chart container -->
+                    <FrameLayout
+                        android:id="@+id/chartContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        android:layout_marginTop="16dp">
+
+                        <!-- Chart representation (simplified) -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:baselineAligned="false">
+                            
+                            <!-- Monday -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:gravity="bottom|center_horizontal">
+                                
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="4"
+                                    android:textSize="10sp"
+                                    android:layout_marginBottom="4dp"/>
+                                
+                                <View
+                                    android:layout_width="20dp"
+                                    android:layout_height="80dp"
+                                    android:background="#3982E4"/>
+                                
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Th 2"
+                                    android:textSize="12sp"
+                                    android:layout_marginTop="4dp"/>
+                                
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="29/07"
+                                    android:textSize="10sp"
+                                    android:textColor="#666666"/>
+                            </LinearLayout>
+                            
+                            <!-- Tuesday -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:gravity="bottom|center_horizontal">
+                                
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0"
+                                    android:textSize="10sp"
+                                    android:layout_marginBottom="4dp"/>
+                                
+                                <View
+                                    android:layout_width="20dp"
+                                    android:layout_height="0dp"
+                                    android:background="#3982E4"/>
+                                
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Th 3"
+                                    android:textSize="12sp"
+                                    android:layout_marginTop="4dp"/>
+                                
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="30/07"
+                                    android:textSize="10sp"
+                                    android:textColor="#666666"/>
+                            </LinearLayout>
+                            
+                            <!-- Wednesday -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:gravity="bottom|center_horizontal">
+                                
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0"
+                                    android:textSize="10sp"
+                                    android:layout_marginBottom="4dp"/>
+                                
+                                <View
+                                    android:layout_width="20dp"
+                                    android:layout_height="0dp"
+                                    android:background="#3982E4"/>
+                                
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Th 4"
+                                    android:textSize="12sp"
+                                    android:layout_marginTop="4dp"/>
+                                
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="31/07"
+                                    android:textSize="10sp"
+                                    android:textColor="#666666"/>
+                            </LinearLayout>
+                            
+                            <!-- Thursday -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:gravity="bottom|center_horizontal">
+                                
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="2"
+                                    android:textSize="10sp"
+                                    android:layout_marginBottom="4dp"/>
+                                
+                                <View
+                                    android:layout_width="20dp"
+                                    android:layout_height="40dp"
+                                    android:background="#3982E4"/>
+                                
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Th 5"
+                                    android:textSize="12sp"
+                                    android:layout_marginTop="4dp"/>
+                                
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="01/08"
+                                    android:textSize="10sp"
+                                    android:textColor="#666666"/>
+                            </LinearLayout>
+                            
+                            <!-- Friday -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:gravity="bottom|center_horizontal">
+                                
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0"
+                                    android:textSize="10sp"
+                                    android:layout_marginBottom="4dp"/>
+                                
+                                <View
+                                    android:layout_width="20dp"
+                                    android:layout_height="0dp"
+                                    android:background="#3982E4"/>
+                                
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Th 6"
+                                    android:textSize="12sp"
+                                    android:layout_marginTop="4dp"/>
+                                
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="02/08"
+                                    android:textSize="10sp"
+                                    android:textColor="#666666"/>
+                            </LinearLayout>
+                            
+                            <!-- Saturday -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:gravity="bottom|center_horizontal">
+                                
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0"
+                                    android:textSize="10sp"
+                                    android:layout_marginBottom="4dp"/>
+                                
+                                <View
+                                    android:layout_width="20dp"
+                                    android:layout_height="0dp"
+                                    android:background="#3982E4"/>
+                                
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Th 7"
+                                    android:textSize="12sp"
+                                    android:layout_marginTop="4dp"/>
+                                
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="03/08"
+                                    android:textSize="10sp"
+                                    android:textColor="#666666"/>
+                            </LinearLayout>
+                            
+                            <!-- Sunday -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:gravity="bottom|center_horizontal">
+                                
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0"
+                                    android:textSize="10sp"
+                                    android:layout_marginBottom="4dp"/>
+                                
+                                <View
+                                    android:layout_width="20dp"
+                                    android:layout_height="0dp"
+                                    android:background="#3982E4"/>
+                                
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="CN"
+                                    android:textSize="12sp"
+                                    android:layout_marginTop="4dp"/>
+                                
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="04/08"
+                                    android:textSize="10sp"
+                                    android:textColor="#666666"/>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </FrameLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Recent Attendance History -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Lịch sử chấm công gần nhất"
+                        android:textColor="#ff009d"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:drawablePadding="8dp"/>
+
+                    <!-- Attendance history list -->
+                    <LinearLayout
+                        android:id="@+id/recentAttendanceContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="16dp">
+
+                        <!-- Each history item -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:background="#F0F3F8"
+                            android:padding="12dp"
+                            android:layout_marginBottom="8dp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Chấm công ngày 01/08/2023 - 08:30"
+                                android:textColor="#333333"
+                                android:textSize="14sp"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:background="#F0F3F8"
+                            android:padding="12dp"
+                            android:layout_marginBottom="8dp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Chấm công ngày 31/07/2023 - 08:15"
+                                android:textColor="#333333"
+                                android:textSize="14sp"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:background="#F0F3F8"
+                            android:padding="12dp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Chấm công ngày 30/07/2023 - 08:45"
+                                android:textColor="#333333"
+                                android:textSize="14sp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
         </LinearLayout>
+    </ScrollView>
 
-    </androidx.cardview.widget.CardView>
+    <!-- Loading progress bar -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="#ff009d"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

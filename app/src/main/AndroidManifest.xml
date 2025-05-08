@@ -27,6 +27,7 @@
         <activity android:name=".ThemNhanVienActivity"     android:exported="false"/>
         <activity android:name=".ThongKeBaoCaoActivity"    android:exported="false"/>
         <activity android:name=".donxinphep"               android:exported="false"/>
+        <activity android:name=".TinhTrangDonPhep"         android:exported="false"/>
         
         <!-- Attendance Summary Activity with parent specified -->
         <activity 
