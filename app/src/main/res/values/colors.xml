@@ -10,4 +10,9 @@
 
     <color name="background">#ff009d</color>
     <color name="main_color">#ff009d</color>
+    
+    <!-- Adding the missing color for use in the app -->
+    <color name="colorPrimary">#ff009d</color>
+    <color name="colorPrimaryDark">#c80077</color>
+    <color name="colorAccent">#FF4081</color>
 </resources>

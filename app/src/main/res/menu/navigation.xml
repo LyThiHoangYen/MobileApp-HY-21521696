@@ -7,9 +7,14 @@
         android:title="@string/title_navigation_home" />
 
     <item
-        android:id="@+id/navigation_newsfeed"
+        android:id="@+id/navigation_dashboard"
         android:icon="@drawable/navigation_newsfeed"
-        android:title="@string/title_navigation_newsfeed" />
+        android:title="Thống kê" />
+
+    <item
+        android:id="@+id/navigation_notifications"
+        android:icon="@drawable/navigation_newsfeed"
+        android:title="Thông báo" />
 
     <item
         android:id="@+id/navigation_profile"

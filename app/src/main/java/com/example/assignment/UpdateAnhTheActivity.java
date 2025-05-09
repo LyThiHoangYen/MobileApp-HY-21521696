@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -19,41 +21,45 @@ import androidx.core.content.ContextCompat;
 public class UpdateAnhTheActivity extends AppCompatActivity {
     ImageView imageView;
     Button btnOpen;
+    
+    private ActivityResultLauncher<Intent> cameraLauncher;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.update_anh_the_nv);
 
         imageView = findViewById(R.id.image_view);
         btnOpen = findViewById(R.id.button2);
+        
+        // Initialize the Activity Result Launcher
+        cameraLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    Bundle extras = result.getData().getExtras();
+                    if (extras != null) {
+                        Bitmap captureImage = getBitmapFromExtras(extras);
+                        if (captureImage != null) {
+                            imageView.setImageBitmap(captureImage);
+                        }
+                    }
+                }
+            }
+        );
 
-        if (ContextCompat.checkSelfPermission(com.example.assignment.UpdateAnhTheActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(com.example.assignment.UpdateAnhTheActivity.this, new String[]{
+        if (ContextCompat.checkSelfPermission(UpdateAnhTheActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(UpdateAnhTheActivity.this, new String[]{
                     Manifest.permission.CAMERA}, 100);
         }
+        
         btnOpen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 100);
+                cameraLauncher.launch(intent);
             }
         });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
-            Bundle extras = data.getExtras();
-            if (extras != null) {
-                Bitmap captureImage = getBitmapFromExtras(extras);
-                if (captureImage != null) {
-                    imageView.setImageBitmap(captureImage);
-                }
-            }
-        }
     }
     
     // Helper method to get bitmap with appropriate API based on Android version

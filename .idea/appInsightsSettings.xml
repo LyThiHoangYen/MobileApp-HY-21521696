@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="AppInsightsSettings">
+    
+    <!-- Giữ phần này từ branch HR -->
+    <option name="selectedTabId" value="Firebase Crashlytics" />
+    
+    <!-- Giữ phần này từ branch main -->
     <option name="tabSettings">
       <map>
         <entry key="Firebase Crashlytics">
@@ -9,18 +14,28 @@
               <option name="connection">
                 <ConnectionSetting>
                   <option name="appId" value="com.example.assignment" />
-                  <option name="mobileSdkAppId" value="1:534283939423:android:be4b8bf722d62c127f75ea" />
-                  <option name="projectId" value="mobileapp-7c29c" />
+                  <option name="mobileSdkAppId" value="1:534283939423:android:bed8abf722dc2c127f75ea" />
+                  <option name="projectId" value="mobileapp-7c2ac" />
                   <option name="projectNumber" value="534283939423" />
                 </ConnectionSetting>
               </option>
-              <option name="signal" value="SIGNAL_UNSPECIFIED" />
-              <option name="timeIntervalDays" value="THIRTY_DAYS" />
-              <option name="visibilityType" value="ALL" />
             </InsightsFilterSettings>
           </value>
         </entry>
       </map>
     </option>
+    
+    <!-- Giữ phần này từ branch HR -->
+    <option name="failureTypes">
+      <list>
+        <option value="ANR" />
+        <option value="FATAL" />
+      </list>
+    </option>
+    
+    <!-- Giữ phần này từ branch main -->
+    <option name="signal" value="SIGNAL_UNSPECIFIED" />
+    <option name="timeIntervalDays" value="THIRTY_DAYS" />
+    <option name="visibilityType" value="ALL" />
   </component>
 </project>

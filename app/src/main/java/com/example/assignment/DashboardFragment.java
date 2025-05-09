@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -12,6 +13,9 @@ import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
@@ -25,6 +29,10 @@ public class DashboardFragment extends Fragment {
     
     private String userType;
     private LinearLayout menuContainer;
+    private CardView cardSalary, cardBenefits, cardPerformance, cardAttendance;
+    private FirebaseAuth auth;
+    private FirebaseFirestore db;
+    private TextView tvUserName, tvUserRole;
 
     public DashboardFragment() {
         // Required empty public constructor
@@ -48,6 +56,10 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Khởi tạo Firebase
+        auth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        
         if (getArguments() != null) {
             userType = getArguments().getString(ARG_USER_TYPE, "employee");
         }
@@ -61,6 +73,18 @@ public class DashboardFragment extends Fragment {
         
         // Find views
         menuContainer = view.findViewById(R.id.menu_container);
+        tvUserName = view.findViewById(R.id.tv_user_name);
+        tvUserRole = view.findViewById(R.id.tv_user_role);
+        cardSalary = view.findViewById(R.id.card_salary);
+        cardBenefits = view.findViewById(R.id.card_benefits);
+        cardPerformance = view.findViewById(R.id.card_performance);
+        cardAttendance = view.findViewById(R.id.card_attendance);
+        
+        // Thiết lập sự kiện click cho các card
+        setupCardClickListeners();
+        
+        // Tải thông tin người dùng
+        loadUserInfo();
         
         // Load appropriate menu items based on user type
         setupMenuItems();
@@ -68,7 +92,81 @@ public class DashboardFragment extends Fragment {
         return view;
     }
     
+    private void setupCardClickListeners() {
+        // Card Lương
+        if (cardSalary != null) {
+            cardSalary.setOnClickListener(v -> {
+                // Có thể chuyển đến activity chi tiết lương
+                // Intent intent = new Intent(getActivity(), SalaryDetailActivity.class);
+                // startActivity(intent);
+                showNotImplementedMessage("Xem chi tiết lương");
+            });
+        }
+        
+        // Card Phúc lợi
+        if (cardBenefits != null) {
+            cardBenefits.setOnClickListener(v -> {
+                // Có thể chuyển đến activity chi tiết phúc lợi
+                // Intent intent = new Intent(getActivity(), BenefitsDetailActivity.class);
+                // startActivity(intent);
+                showNotImplementedMessage("Xem phúc lợi");
+            });
+        }
+        
+        // Card Hiệu suất
+        if (cardPerformance != null) {
+            cardPerformance.setOnClickListener(v -> {
+                // Có thể chuyển đến activity thống kê hiệu suất
+                // Intent intent = new Intent(getActivity(), PerformanceActivity.class);
+                // startActivity(intent);
+                showNotImplementedMessage("Xem hiệu suất làm việc");
+            });
+        }
+        
+        // Card Chấm công
+        if (cardAttendance != null) {
+            cardAttendance.setOnClickListener(v -> {
+                Intent intent = new Intent(getActivity(), tom_tat__diem_danh.class);
+                startActivity(intent);
+            });
+        }
+    }
+    
+    private void loadUserInfo() {
+        if (auth.getCurrentUser() != null && tvUserName != null && tvUserRole != null) {
+            String uid = auth.getCurrentUser().getUid();
+            db.collection("employees").document(uid)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String fullName = documentSnapshot.getString("fullName");
+                        String role = documentSnapshot.getString("role");
+                        
+                        if (fullName != null) {
+                            tvUserName.setText(fullName);
+                        }
+                        
+                        if (role != null) {
+                            String displayRole = role.equals("MANAGER") ? "Quản lý" : 
+                                               (role.equals("HR") ? "Nhân sự" : "Nhân viên");
+                            tvUserRole.setText(displayRole);
+                        }
+                    }
+                });
+        }
+    }
+    
+    private void showNotImplementedMessage(String feature) {
+        if (getContext() != null) {
+            Toast.makeText(getContext(), 
+                feature + " đang được phát triển", 
+                Toast.LENGTH_SHORT).show();
+        }
+    }
+    
     private void setupMenuItems() {
+        if (menuContainer == null) return;
+        
         List<MenuItem> menuItems = getMenuItems();
         
         LayoutInflater inflater = getLayoutInflater();
@@ -149,4 +247,4 @@ public class DashboardFragment extends Fragment {
             return activityClass;
         }
     }
-} 
+}

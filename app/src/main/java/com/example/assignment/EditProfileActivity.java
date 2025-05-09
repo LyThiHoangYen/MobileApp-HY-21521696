@@ -19,6 +19,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -58,6 +60,9 @@ public class EditProfileActivity extends AppCompatActivity {
     // Department and position options
     private String[] departments = {"Phòng IT", "Phòng HR", "Phòng Marketing", "Phòng Sale", "Phòng Kế toán"};
     private String[] positions = {"Nhân viên", "Trưởng nhóm", "Quản lý", "Giám đốc", "CEO"};
+    
+    // Activity Result Launcher for gallery
+    private ActivityResultLauncher<Intent> galleryLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +72,9 @@ public class EditProfileActivity extends AppCompatActivity {
         // Initialize Firebase
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+        
+        // Register activity result launcher
+        registerActivityResultLaunchers();
 
         // Set up toolbar
         toolbar = findViewById(R.id.toolbar);
@@ -81,6 +89,22 @@ public class EditProfileActivity extends AppCompatActivity {
 
         // Load user data
         loadUserData();
+    }
+    
+    private void registerActivityResultLaunchers() {
+        galleryLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    selectedImageUri = result.getData().getData();
+                    if (selectedImageUri != null) {
+                        imgAvatar.setImageURI(selectedImageUri);
+                        isPhotoChanged = true;
+                        Toast.makeText(this, "Tính năng thay đổi ảnh sẽ được cập nhật trong phiên bản sau", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        );
     }
 
     private void initViews() {
@@ -294,7 +318,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void openGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, REQUEST_IMAGE_PICK);
+        galleryLauncher.launch(intent);
     }
 
     @Override
@@ -305,19 +329,6 @@ public class EditProfileActivity extends AppCompatActivity {
                 openGallery();
             } else {
                 Toast.makeText(this, "Cần quyền truy cập bộ nhớ để chọn ảnh", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_PICK && resultCode == RESULT_OK && data != null) {
-            selectedImageUri = data.getData();
-            if (selectedImageUri != null) {
-                imgAvatar.setImageURI(selectedImageUri);
-                isPhotoChanged = true;
-                Toast.makeText(this, "Tính năng thay đổi ảnh sẽ được cập nhật trong phiên bản sau", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -334,4 +345,4 @@ public class EditProfileActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-} 
+}
