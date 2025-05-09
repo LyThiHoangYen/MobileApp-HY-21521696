@@ -61,6 +61,7 @@ public class UpdateAnhTheActivity extends AppCompatActivity {
         });
     }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -69,6 +70,8 @@ public class UpdateAnhTheActivity extends AppCompatActivity {
             Bitmap captureImage = (Bitmap) data.getExtras().get("data");
             imageView.setImageBitmap(captureImage);
 =======
+=======
+>>>>>>> Stashed changes
     
     // Helper method to get bitmap with appropriate API based on Android version
     private Bitmap getBitmapFromExtras(Bundle extras) {
