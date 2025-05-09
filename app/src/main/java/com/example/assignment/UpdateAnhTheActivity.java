@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -25,7 +26,6 @@ public class UpdateAnhTheActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.update_anh_the_nv);
 
@@ -48,10 +48,11 @@ public class UpdateAnhTheActivity extends AppCompatActivity {
             }
         );
 
-        if (ContextCompat.checkSelfPermission(com.example.assignment.UpdateAnhTheActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(com.example.assignment.UpdateAnhTheActivity.this, new String[]{
+        if (ContextCompat.checkSelfPermission(UpdateAnhTheActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(UpdateAnhTheActivity.this, new String[]{
                     Manifest.permission.CAMERA}, 100);
         }
+        
         btnOpen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,18 +61,6 @@ public class UpdateAnhTheActivity extends AppCompatActivity {
             }
         });
     }
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 100) {
-            Bitmap captureImage = (Bitmap) data.getExtras().get("data");
-            imageView.setImageBitmap(captureImage);
-=======
-=======
->>>>>>> Stashed changes
     
     // Helper method to get bitmap with appropriate API based on Android version
     private Bitmap getBitmapFromExtras(Bundle extras) {
@@ -82,9 +71,6 @@ public class UpdateAnhTheActivity extends AppCompatActivity {
             @SuppressWarnings("deprecation")
             Bitmap bitmap = (Bitmap) extras.getParcelable("data");
             return bitmap;
->>>>>>> Stashed changes
         }
-
     }
-
 }

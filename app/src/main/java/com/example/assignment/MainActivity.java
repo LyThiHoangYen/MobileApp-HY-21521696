@@ -18,6 +18,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
+    // Set the user type here - can be changed based on login info
+    private String userType = "employee"; 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +30,8 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitle("Dashboard");
         setSupportActionBar(toolbar);
 
-        loadFragment(new HomeFragment());
+        // Load our new Dashboard Fragment with the user type
+        loadFragment(DashboardFragment.newInstance(userType));
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -45,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     toolbar.setTitle("Dashboard");
-                    fragment = new HomeFragment();
+                    fragment = DashboardFragment.newInstance(userType);
                     loadFragment(fragment);
                     return true;
                 case R.id.navigation_dashboard:

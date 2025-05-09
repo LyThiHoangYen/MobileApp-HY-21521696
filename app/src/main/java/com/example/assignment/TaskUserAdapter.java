@@ -100,6 +100,12 @@ public class TaskUserAdapter extends RecyclerView.Adapter <TaskUserAdapter.MyVie
                             activity.startActivity(intent);
                             break;
                         }
+                        case "Duyệt đơn nghỉ phép":{
+                            AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                            Intent intent = new Intent(v.getContext(), DuyetDonActivity.class);
+                            activity.startActivity(intent);
+                            break;
+                        }
                         case "Tạo thông báo": {
                             Fragment fragment;
                             fragment = new NewsfeedFragment();

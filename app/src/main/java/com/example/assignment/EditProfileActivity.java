@@ -38,6 +38,7 @@ import java.util.Map;
 
 public class EditProfileActivity extends AppCompatActivity {
 
+    private static final int REQUEST_IMAGE_PICK = 1001;
     private static final int REQUEST_PERMISSION_CODE = 1002;
 
     // UI components
@@ -99,6 +100,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     if (selectedImageUri != null) {
                         imgAvatar.setImageURI(selectedImageUri);
                         isPhotoChanged = true;
+                        Toast.makeText(this, "Tính năng thay đổi ảnh sẽ được cập nhật trong phiên bản sau", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -343,4 +345,4 @@ public class EditProfileActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-} 
+}
