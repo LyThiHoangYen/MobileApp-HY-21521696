@@ -101,6 +101,9 @@ public class LoginActivity extends AppCompatActivity {
                     progress.setVisibility(View.GONE);
                     String role = doc.getString("role");
                     if (role == null) role = "EMPLOYEE";
+                    
+                    // Chuyển role về chữ hoa để so sánh không phân biệt chữ hoa/thường
+                    role = role.toUpperCase();
 
                     Intent i;
                     switch (role) {

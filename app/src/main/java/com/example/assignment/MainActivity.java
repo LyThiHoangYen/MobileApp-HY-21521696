@@ -48,9 +48,14 @@ public class MainActivity extends AppCompatActivity {
                     fragment = new HomeFragment();
                     loadFragment(fragment);
                     return true;
-                case R.id.navigation_newsfeed:
+                case R.id.navigation_dashboard:
                     toolbar.setTitle("Bảng tin");
                     fragment = new NewsfeedFragment();
+                    loadFragment(fragment);
+                    return true;
+                case R.id.navigation_notifications:
+                    toolbar.setTitle("Thông báo");
+                    fragment = new NotificationsFragment();
                     loadFragment(fragment);
                     return true;
                 case R.id.navigation_profile:

@@ -52,6 +52,7 @@
             </LinearLayout>
         </LinearLayout>
 
+<<<<<<< Updated upstream
         <!-- Nút chỉnh sửa -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnEditProfile"
@@ -60,6 +61,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Chỉnh sửa hồ sơ" />
+=======
+    <!-- Content -->
+    <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+>>>>>>> Stashed changes
 
         <!-- Divider -->
         <View
@@ -125,6 +134,7 @@
                     android:paddingStart="16dp"
                     android:text="Đăng xuất" />
 
+<<<<<<< Updated upstream
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -134,3 +144,234 @@
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
+=======
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Thông tin cá nhân"
+                        android:textColor="#333333"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <!-- Phone -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_phone"
+                            app:tint="#555555" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Số điện thoại"
+                                android:textColor="#777777"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/tvPhone"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0123456789"
+                                android:textColor="#333333"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Department -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_department"
+                            app:tint="#555555" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Phòng ban"
+                                android:textColor="#777777"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/tvDepartment"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Phòng IT"
+                                android:textColor="#333333"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Position -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_work"
+                            app:tint="#555555" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Chức vụ"
+                                android:textColor="#777777"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/tvPosition"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Nhân viên"
+                                android:textColor="#333333"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Settings Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cài đặt"
+                        android:textColor="#333333"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <!-- Change Password -->
+            <LinearLayout
+                android:id="@+id/rowChangePassword"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                        android:clickable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                            android:src="@drawable/ic_lock"
+                            app:tint="#555555" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                            android:text="Đổi mật khẩu"
+                            android:textColor="#333333"
+                            android:textSize="16sp" />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                            android:src="@drawable/ic_chevron_right"
+                            app:tint="#555555" />
+            </LinearLayout>
+
+                    <!-- Divider -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#EEEEEE" />
+
+                    <!-- Logout -->
+            <LinearLayout
+                android:id="@+id/rowLogout"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                        android:clickable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                            android:src="@drawable/ic_logout"
+                            app:tint="#E53935" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                            android:text="Đăng xuất"
+                            android:textColor="#E53935"
+                            android:textSize="16sp" />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                            android:src="@drawable/ic_chevron_right"
+                            app:tint="#E53935" />
+                    </LinearLayout>
+            </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Version Info -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="Phiên bản 1.0.0"
+                android:textColor="#999999"
+                android:textSize="12sp" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+>>>>>>> Stashed changes

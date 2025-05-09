@@ -101,10 +101,13 @@ public class TaskUserAdapter extends RecyclerView.Adapter <TaskUserAdapter.MyVie
                             break;
                         }
                         case "Tạo thông báo": {
+                            Fragment fragment;
+                            fragment = new NewsfeedFragment();
                             AppCompatActivity activity = (AppCompatActivity) v.getContext();
-                            Intent intent = new Intent(v.getContext(), ThongBaoActivity.class);
-                            activity.startActivity(intent);
-                            //finish();
+                            FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+                            transaction.replace(R.id.frame_container, fragment);
+                            transaction.addToBackStack(null);
+                            transaction.commit();
                             break;
                         }
                         case "Thống kê báo cáo":{
@@ -146,6 +149,22 @@ public class TaskUserAdapter extends RecyclerView.Adapter <TaskUserAdapter.MyVie
                             transaction.replace(R.id.frame_container, fragment);
                             transaction.addToBackStack(null);
                             transaction.commit();
+                            break;
+                        }
+                        case "Quản lý nhân viên": {
+                            AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                            Intent intent = new Intent(v.getContext(), DanhBaNhanSuActivity.class);
+                            activity.startActivity(intent);
+                            break;
+                        }
+                        case "Báo cáo chấm công": {
+                            AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                            Intent intent = new Intent(v.getContext(), tom_tat__diem_danh.class);
+                            activity.startActivity(intent);
+                            break;
+                        }
+                        case "Thống kê hiệu suất": {
+                            Toast.makeText(v.getContext(), "Tính năng đang phát triển", Toast.LENGTH_SHORT).show();
                             break;
                         }
                     }
