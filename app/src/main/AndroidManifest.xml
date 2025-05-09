@@ -26,6 +26,7 @@
         <activity android:name=".UpdateAnhTheActivity"     android:exported="false"/>
         <activity android:name=".ThemNhanVienActivity"     android:exported="false"/>
         <activity android:name=".ThongKeBaoCaoActivity"    android:exported="false"/>
+        <activity android:name=".StatisticsActivity"       android:exported="false"/>
         <activity android:name=".donxinphep"               android:exported="false"/>
         <activity android:name=".TinhTrangDonPhep"         android:exported="false"/>
         <activity android:name=".DuyetDonActivity"         android:exported="false"/>
