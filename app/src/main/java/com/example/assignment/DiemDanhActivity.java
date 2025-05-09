@@ -2,10 +2,12 @@ package com.example.assignment;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -33,7 +35,7 @@ public class DiemDanhActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TextView tvDate, tvTime, tvStatus;
     private ProgressBar progressBar;
-    private Handler timeHandler = new Handler();
+    private Handler timeHandler = new Handler(Looper.getMainLooper());
     private Runnable timeRunnable;
 
     // Biến thành viên để lưu trữ trạng thái điểm danh
@@ -188,7 +190,7 @@ public class DiemDanhActivity extends AppCompatActivity {
             showAttendanceStatus(statusMessage, true);
             
             // Sau 3 giây, trả màn hình về trạng thái mặc định
-            new Handler().postDelayed(() -> {
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 resetScreenToDefault();
             }, 3000);
             
@@ -198,10 +200,16 @@ public class DiemDanhActivity extends AppCompatActivity {
             statusMessage = "Điểm danh vào thành công lúc " + checkInTime +
                            "\nĐừng quên điểm danh ra khi kết thúc!";
             showAttendanceStatus(statusMessage, true);
+            
             btnCheckIn.setEnabled(false);
             btnCheckOut.setEnabled(true);
         } else {
-            resetScreenToDefault();
+            // Hiển thị trạng thái mặc định
+            statusMessage = "Bạn chưa điểm danh hôm nay.\nHãy điểm danh vào!";
+            showAttendanceStatus(statusMessage, false);
+            
+            btnCheckIn.setEnabled(true);
+            btnCheckOut.setEnabled(false);
         }
     }
 
@@ -275,7 +283,7 @@ public class DiemDanhActivity extends AppCompatActivity {
                             showAttendanceStatus(message, true);
                             
                             // Sau 3 giây, đặt lại màn hình cho ngày làm việc mới
-                            new Handler().postDelayed(() -> {
+                            new Handler(Looper.getMainLooper()).postDelayed(() -> {
                                 // Reset trạng thái cho ngày làm việc mới
                                 hasCheckIn = false;
                                 hasCheckOut = false;
@@ -331,7 +339,7 @@ public class DiemDanhActivity extends AppCompatActivity {
                             showAttendanceStatus(message, true);
                             
                             // Sau 3 giây, đặt lại màn hình cho ngày làm việc mới
-                            new Handler().postDelayed(() -> {
+                            new Handler(Looper.getMainLooper()).postDelayed(() -> {
                                 // Reset trạng thái cho ngày làm việc mới
                                 hasCheckIn = false;
                                 hasCheckOut = false;
@@ -361,7 +369,7 @@ public class DiemDanhActivity extends AppCompatActivity {
     
     private void showAttendanceStatus(String message, boolean isSuccess) {
         tvStatus.setText(message);
-        tvStatus.setBackgroundColor(getResources().getColor(isSuccess ? android.R.color.holo_green_light : android.R.color.holo_red_light));
+        tvStatus.setBackgroundColor(ContextCompat.getColor(this, isSuccess ? android.R.color.holo_green_light : android.R.color.holo_red_light));
         tvStatus.setVisibility(View.VISIBLE);
     }
 

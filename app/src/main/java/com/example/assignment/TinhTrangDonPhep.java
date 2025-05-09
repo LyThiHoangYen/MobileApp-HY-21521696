@@ -3,6 +3,7 @@ package com.example.assignment;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -274,19 +275,19 @@ public class TinhTrangDonPhep extends AppCompatActivity {
             switch (status) {
                 case "pending":
                     textView.setText("Đang chờ");
-                    textView.setTextColor(getResources().getColor(android.R.color.holo_blue_dark));
+                    textView.setTextColor(ContextCompat.getColor(TinhTrangDonPhep.this, android.R.color.holo_blue_dark));
                     break;
                 case "approved":
                     textView.setText("Đã duyệt");
-                    textView.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
+                    textView.setTextColor(ContextCompat.getColor(TinhTrangDonPhep.this, android.R.color.holo_green_dark));
                     break;
                 case "rejected":
                     textView.setText("Từ chối");
-                    textView.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+                    textView.setTextColor(ContextCompat.getColor(TinhTrangDonPhep.this, android.R.color.holo_red_dark));
                     break;
                 default:
                     textView.setText("Không xác định");
-                    textView.setTextColor(getResources().getColor(android.R.color.darker_gray));
+                    textView.setTextColor(ContextCompat.getColor(TinhTrangDonPhep.this, android.R.color.darker_gray));
             }
         }
 
