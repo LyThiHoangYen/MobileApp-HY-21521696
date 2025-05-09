@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -44,11 +45,26 @@ public class UpdateAnhTheActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 100) {
-            Bitmap captureImage = (Bitmap) data.getExtras().get("data");
-            imageView.setImageBitmap(captureImage);
+        if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
+            Bundle extras = data.getExtras();
+            if (extras != null) {
+                Bitmap captureImage = getBitmapFromExtras(extras);
+                if (captureImage != null) {
+                    imageView.setImageBitmap(captureImage);
+                }
+            }
         }
-
     }
-
+    
+    // Helper method to get bitmap with appropriate API based on Android version
+    private Bitmap getBitmapFromExtras(Bundle extras) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            return extras.getParcelable("data", Bitmap.class);
+        } else {
+            // Suppressing warning for backward compatibility
+            @SuppressWarnings("deprecation")
+            Bitmap bitmap = (Bitmap) extras.getParcelable("data");
+            return bitmap;
+        }
+    }
 }
