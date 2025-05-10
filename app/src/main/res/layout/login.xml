@@ -21,7 +21,6 @@
     <!-- Logo HR ở giữa phía trên -->
 
     <!-- Tên ứng dụng -->
-
     <ImageView
         android:id="@+id/imageView10"
         android:layout_width="120dp"
