@@ -61,10 +61,14 @@ public class UpdateAnhTheActivity extends AppCompatActivity {
             }
         });
     }
+<<<<<<< Updated upstream
     
+=======
+
+>>>>>>> Stashed changes
     // Helper method to get bitmap with appropriate API based on Android version
     private Bitmap getBitmapFromExtras(Bundle extras) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
             return extras.getParcelable("data", Bitmap.class);
         } else {
             // Suppressing warning for backward compatibility
