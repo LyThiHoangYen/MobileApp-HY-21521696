@@ -3,22 +3,12 @@
 
     <item
         android:id="@+id/navigation_home"
-        android:icon="@drawable/navigation_home"
+        android:icon="@mipmap/ic_launcher"
         android:title="@string/title_navigation_home" />
 
     <item
-        android:id="@+id/navigation_dashboard"
-        android:icon="@drawable/navigation_newsfeed"
-        android:title="Thống kê" />
-
-    <item
-        android:id="@+id/navigation_notifications"
-        android:icon="@drawable/navigation_newsfeed"
-        android:title="Thông báo" />
-
-    <item
         android:id="@+id/navigation_profile"
-        android:icon="@drawable/navigation_profile"
+        android:icon="@mipmap/ic_launcher"
         android:title="@string/title_navigation_profile" />
 
 </menu>
