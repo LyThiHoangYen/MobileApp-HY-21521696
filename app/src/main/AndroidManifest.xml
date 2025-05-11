@@ -27,6 +27,7 @@
         <activity android:name=".activity.OrderActivity"            android:exported="false"/>
         <activity android:name=".activity.OrderHistoryActivity"            android:exported="false"/>
         <activity android:name=".activity.ProfileActivity"            android:exported="false"/>
+        <activity android:name=".activity.EditProfileActivity"            android:exported="false"/>
         <activity android:name=".activity.ForgotPasswordActivity"            android:exported="false"/>
         <activity android:name=".activity.ReviewActivity"            android:exported="false"/>
         <activity android:name=".activity.VoucherActivity"            android:exported="false"/>
@@ -55,6 +56,8 @@
             android:name=".activity.ThongBaoActivity"
             android:theme="@style/Theme.Assignment.NoActionBar"
             android:exported="false"/>
+
+        <activity android:name=".activity.FoodListActivity"            android:exported="false"/>
     </application>
 </manifest>
 

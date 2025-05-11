@@ -3,26 +3,82 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:background="#fff">
 
-    <Spinner
-        android:id="@+id/spinnerCategory"
+    <!-- Header: Search + Cart -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"/>
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:gravity="center_vertical">
 
-    <EditText
-        android:id="@+id/edtFilterPrice"
-        android:layout_width="match_parent"
+        <EditText
+            android:id="@+id/edtSearchFood"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:hint="Search..."
+            android:background="@drawable/bg_edittext"
+            android:drawableLeft="@drawable/ic_search"
+            android:drawablePadding="8dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textColor="#222"
+            android:textSize="16sp"/>
+
+        <ImageView
+            android:id="@+id/ivCart"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_cart"
+            android:layout_marginStart="12dp"
+            android:tint="#ff009d"/>
+    </LinearLayout>
+
+    <!-- Danh mục -->
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Lọc theo giá tiền (ví dụ: &lt; 100k)"
-        android:inputType="number"/>
+        android:text="DANH MỤC"
+        android:textStyle="bold"
+        android:textColor="#222"
+        android:textSize="16sp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvCategory"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="8dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:overScrollMode="never"
+        android:clipToPadding="false"
+        android:orientation="horizontal"/>
+
+    <!-- Danh sách món ăn -->
+    <TextView
+        android:id="@+id/tvCategoryTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hamburger"
+        android:textStyle="bold"
+        android:textColor="#222"
+        android:textSize="18sp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="4dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvFoodList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="8dp"/>
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:clipToPadding="false"
+        android:overScrollMode="never"/>
 
 </LinearLayout> 
