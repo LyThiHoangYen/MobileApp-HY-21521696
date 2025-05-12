@@ -1,4 +1,3 @@
-
 <!-- Banner -->
 <p align="center">
   <a href="https://www.uit.edu.vn/" title="Trường Đại học Công nghệ Thông tin" style="border: none;">
@@ -10,7 +9,7 @@
 
 ## Giới thiệu môn học
 - **Tên môn học:** Phát triển ứng dụng trên thiết bị di động
-- **Mã môn học:** 
+- **Mã môn học:** NT118
 
 <!-- ABOUT THE PROJECT -->
 
@@ -22,3 +21,11 @@ Nội dung project là ứng dụng di động bao gồm các chức năng giúp
 ## Yêu cầu công nghệ
 
 ## Thành viên nhóm
+
+| STT | Họ tên                   | MSSV     |
+| :-: | ------------------       | -------- |
+|  1  | TrầnThị Hồng Minh        | 20520639 |
+|  2  | PhanThanh Bách           | 20521089 |
+|  3  | Nguyễn Vân Anh           | 20521075 |
+|  4  | Trần Hoài Nam            | 20521636 |
+
