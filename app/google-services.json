@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "534283939423",
-    "project_id": "mobileapp-7c29c",
-    "storage_bucket": "mobileapp-7c29c.firebasestorage.app"
+    "project_number": "371467779826",
+    "project_id": "hyntea-84324",
+    "storage_bucket": "hyntea-84324.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:534283939423:android:be4b8bf722d62c127f75ea",
+        "mobilesdk_app_id": "1:371467779826:android:bbb6c041b46d5925f49a6b",
         "android_client_info": {
           "package_name": "com.example.assignment"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyADVn72oRzOVmvpdcRkgJzObypVt5iZbrw"
+          "current_key": "AIzaSyCIJ0361_hCgcXgyK_rIjdgINJY_PE3YtM"
         }
       ],
       "services": {

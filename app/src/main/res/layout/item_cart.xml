@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:elevation="4dp"
+    app:cardCornerRadius="16dp"
+    app:cardBackgroundColor="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/imgFood"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_launcher_background" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="8dp">
+
+            <TextView
+                android:id="@+id/tvFoodName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cơm gà mắm tỏi kèm nước"
+                android:textSize="15sp"
+                android:textColor="#222"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:textStyle="normal"/>
+
+            <TextView
+                android:id="@+id/tvFoodPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="49.000 đ"
+                android:textSize="15sp"
+                android:textColor="#222"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tvQuantity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    android:textColor="#ff009d"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_quantity_circle"
+                    android:padding="4dp"
+                    android:layout_marginEnd="4dp"/>
+
+                <ImageView
+                    android:id="@+id/btnDelete"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_delete"
+                    android:tint="#ff009d"
+                    android:contentDescription="Xóa"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView> 

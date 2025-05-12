@@ -1,39 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:background="#f7f7f7">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Giỏ hàng"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="16dp"/>
+    <!-- Header -->
+    <include layout="@layout/view_header_cart" />
 
+    <!-- Danh sách sản phẩm trong giỏ hàng -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCart"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:clipToPadding="false"/>
 
-    <TextView
-        android:id="@+id/tvTotalPrice"
+    <!-- Thanh tổng thanh toán và nút đặt hàng -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Tổng tiền: 0đ"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginTop="8dp"/>
+        android:orientation="horizontal"
+        android:background="#ff009d"
+        android:padding="12dp"
+        android:gravity="center_vertical">
 
-    <Button
-        android:id="@+id/btnOrder"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Đặt hàng"
-        android:layout_marginTop="16dp"/>
+        <TextView
+            android:id="@+id/tvTotalPrice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Tổng thanh toán\n59.000 đ"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="15sp"/>
 
+        <Button
+            android:id="@+id/btnOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đặt hàng (2)"
+            android:textColor="#ff009d"
+            android:background="@drawable/bg_cart_order_btn"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:textStyle="bold"/>
+    </LinearLayout>
 </LinearLayout> 

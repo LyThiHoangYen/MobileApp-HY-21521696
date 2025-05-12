@@ -8,42 +8,70 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.assignment.R;
+import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
-    private final int[] icons = {
-        R.drawable.iccategory1, R.drawable.iccategory2, R.drawable.iccategory3, R.drawable.iccategory4,
-        R.drawable.iccategory5, R.drawable.iccategory6, R.drawable.iccategory7, R.drawable.iccategory8
-    };
-    private final String[] names = {
-        "Thức uống", "Pizza", "Gà rán", "Burger",
-        "Cơm", "Tráng miệng", "Đồ ăn nhanh", "Kem"
-    };
+
+    private List<Category> categories;
+    private int selectedPosition = 0;
+    private OnItemClickListener onItemClickListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public CategoryAdapter(List<Category> categories, OnItemClickListener listener) {
+        this.categories = categories;
+        this.onItemClickListener = listener;
+    }
 
     @NonNull
     @Override
     public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_category, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.horizontal_menu_item, parent, false);
         return new CategoryViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
-        holder.imgCategory.setImageResource(icons[position]);
-        holder.txtCategory.setText(names[position]);
+        Category category = categories.get(position);
+        holder.icon.setImageResource(category.getIconRes());
+        holder.title.setText(category.getTitle());
+
+        // Đổi background khi được chọn
+        if (selectedPosition == position) {
+            holder.container.setBackgroundResource(R.drawable.bg_category_selected);
+        } else {
+            holder.container.setBackgroundResource(R.drawable.bg_category_unselected);
+        }
+
+        holder.itemView.setOnClickListener(v -> {
+            int previousPosition = selectedPosition;
+            selectedPosition = position;
+            notifyItemChanged(previousPosition);
+            notifyItemChanged(selectedPosition);
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(position);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return icons.length;
+        return categories.size();
     }
 
-    static class CategoryViewHolder extends RecyclerView.ViewHolder {
-        ImageView imgCategory;
-        TextView txtCategory;
-        CategoryViewHolder(@NonNull View itemView) {
+    public static class CategoryViewHolder extends RecyclerView.ViewHolder {
+        ImageView icon;
+        TextView title;
+        View container;
+
+        public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
-            imgCategory = itemView.findViewById(R.id.imgCategory);
-            txtCategory = itemView.findViewById(R.id.txtCategory);
+            icon = itemView.findViewById(R.id.menu_icon);
+            title = itemView.findViewById(R.id.menu_title);
+            container = itemView.findViewById(R.id.item_container);
         }
     }
 } 
