@@ -26,40 +26,9 @@ import QuenMatKhau from './src/screen/QuenMatKhau';
 // import ReviewDescription from './src/screen/Rating/ReviewDescription';
 // import Account from './src/screen/Account';
 
-const App = () => {
-  const [loggedIn, setLoggedIn] = useState(null);
-useEffect(() => {
-  console.log("👀 Checking auth status...");
-
-  const unsubscribe = auth.onAuthStateChanged((user) => {
-    if (user) {
-      console.log("✅ Logged in:", user.email);
-      setLoggedIn(true);
-    } else {
-      console.log("🚫 Not logged in");
-      setLoggedIn(false);
-    }
-  });
-
-  // 🧪 Kiểm tra kết nối Firestore
-const testFirestore = async () => {
-  console.log("⚙️ Running testFirestore...");
-  try {
-    const snapshot = await getDocs(collection(db, "danhmuc"));
-    console.log("🔥 Firestore OK — Found", snapshot.size);
-  } catch (err) {
-    console.log("❌ Firestore error:", err.message);
-  }
-};
 
 
 
-
-
-  testFirestore();
-
-  return () => unsubscribe();
-}, []);
 
 
 
@@ -96,6 +65,5 @@ const testFirestore = async () => {
       </NavigationContainer>
     </SafeAreaProvider>
   )
-};
 
 export default App;
