@@ -5,15 +5,16 @@
   </a>
 </p>
 
-<h1 align="center"><b>Phát triển ứng dụng trên thiết bị di động</b></h>
+<h1 align="center"><b>Mobile Application Development
+</b></h>
 
-## Giới thiệu môn học
-- **Tên môn học:** Phát triển ứng dụng trên thiết bị di động
-- **Mã môn học:** CS4153.P22.CTTT
+## Course Introduction
+- **Course Name:**  Mobile Application Development
+- **Course Code:** CS4153.P22.CTTT
 
 <!-- ABOUT THE PROJECT -->
 
-## Mục tiêu của đồ án
+## Project Objective:
 
 This is a project for the course Mobile Application Development.
 The project's content is a mobile application that includes the following features:
