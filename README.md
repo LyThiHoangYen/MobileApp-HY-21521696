@@ -5,27 +5,29 @@
   </a>
 </p>
 
-<h1 align="center"><b>Phát triển ứng dụng trên thiết bị di động</b></h>
+<h1 align="center"><b>Mobile Application Development
+</b></h>
 
-## Giới thiệu môn học
-- **Tên môn học:** Phát triển ứng dụng trên thiết bị di động
-- **Mã môn học:** NT118
+## Course Introduction
+- **Course Name:**  Mobile Application Development
+- **Course Code:** CS4153.P22.CTTT
 
 <!-- ABOUT THE PROJECT -->
 
-## Mục tiêu của đồ án
+## Project Objective:
 
-Đây là project của môn học Phát triển ứng dụng trên thiết bị di động.
-Nội dung project là ứng dụng di động bao gồm các chức năng giúp khách hàng xem thông tin và giá cả của các món ăn, nước uống, cho phép khách hàng thêm sản phẩm vào giỏ hàng, thêm và lưu trữ địa chỉ của khách hàng, thực hiện thao tác đặt hàng, tạo đơn hàng.
+This is a project for the course Mobile Application Development.
+The project's content is a mobile application that includes the following features:
 
-## Yêu cầu công nghệ
+Allows customers to view information and prices of food and beverages
 
-## Thành viên nhóm
+Enables customers to add products to their cart
 
-| STT | Họ tên                   | MSSV     |
-| :-: | ------------------       | -------- |
-|  1  | TrầnThị Hồng Minh        | 20520639 |
-|  2  | PhanThanh Bách           | 20521089 |
-|  3  | Nguyễn Vân Anh           | 20521075 |
-|  4  | Trần Hoài Nam            | 20521636 |
+Allows customers to add and save their address
+
+Supports order placement and order creation
+
+
+
+
 
